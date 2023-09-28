@@ -8,10 +8,10 @@ interface NavLayoutProps{
 const NavLayout=({children}:NavLayoutProps)=>{
 return(  
 <div>   
-<nav className="bg-deepSpace text-platinum border-solid border-1 border-gunmetal shadow-custom">
+<nav className="bg-deepSpace text-platinum border-b-2 border-gunmetal shadow-custom">
 <div className="container mx-auto px-4 py-2 flex justify-between items-center">
     <div className="brand">
-        <img src={AppLogo} alt="SQL Designer Logo" className="w-40 mr-2"/>
+        <img src={AppLogo} alt="SQL Designer Logo" className="w-30 mr-2"/>
     </div>
     <div className="secondary-actions hidden md:flex">
         <div className="mr-4 cursor-pointer hover:text-ceruleanBlue ">
