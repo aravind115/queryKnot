@@ -22,9 +22,6 @@ const InnerItem:React.FC<InnerItemProps>=({id,hideIcon,parent,onMove,index})=>{
             isDragging: monitor.isDragging(),
           }),
     })
-
-
-
     // console.log("isDragging",isDragging)
     const [,dropRef]=useDrop({
         accept:"INNER_ITEM",
