@@ -1,28 +1,54 @@
 import { TableCellsIcon } from "@heroicons/react/24/outline";
 import React from "react";
-import { useDrag } from "react-dnd";
+import { useDrag,useDrop } from "react-dnd";
 interface InnerItemProps{
-    id:string;
+    id?:string;
     onDelete?: () => void;
     hideIcon?:boolean;
+    onMove?:(dragId:number,hoverId:string)=>void;
+    label?:string;
+    parent: string; 
+    index?:number
 }
-const InnerItem:React.FC<InnerItemProps>=({id,hideIcon})=>{
-    const [,ref]=useDrag({
+type DraggedItemType = {
+    id: string;
+    parent: string;
+  };
+const InnerItem:React.FC<InnerItemProps>=({id,hideIcon,parent,onMove,index})=>{
+    const [{ isDragging },ref]=useDrag({
         type:'INNER_ITEM',
-        item:{id}
+        item:{id,parent} as DraggedItemType,
+        collect: monitor => ({
+            isDragging: monitor.isDragging(),
+          }),
     })
 
+
+
+    // console.log("isDragging",isDragging)
+    const [,dropRef]=useDrop({
+        accept:"INNER_ITEM",
+        hover:(draggedItem:any,monitor:any)=>{
+            if (index !== undefined) {
+                onMove?.(index, draggedItem.id);
+            }
+        },
+    })
+const  combinedRef=(node:any)=>{
+    ref(node);
+    dropRef(node)
+};
     if(hideIcon){
         return(
             <div
-            // ref={ref}
+            ref={combinedRef}
             style={{
                 padding:"10px",
                 border: '1px solid blue',
                 cursor: 'grab',
                 margin: '5px',
               }}>
-                Item {id}
+                {id}
             </div>
         )
     }else{
