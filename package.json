@@ -1,9 +1,9 @@
 {
-  "name": "my-project",
+  "homepage": "http://aravind115.github.io/queryKnot/",
+  "name": "queryknot",
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "http://aravind115.github.io/queryKnot",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
