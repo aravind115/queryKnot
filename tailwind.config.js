@@ -11,10 +11,15 @@ export default {
       },
       width:{
         "40":"40%",
-        "30":"30%"
+        "30":"30%",
+        '25px': '25px'
+      },
+      height:{
+        '25': '100px'
       },
       boxShadow: {
-        custom: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+        "custom": '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+         'outline': '0 0 0 3px rgba(66, 153, 225, 0.5)'
       },
       backgroundColor: {
         'deepSpace': '#1E1E1E',
@@ -32,7 +37,8 @@ export default {
       borderColor: {
         'outerSpace': '#414A4C',
         'gunmetal': '#2C3539',
-        "charcoalMist":"#343434"
+        "charcoalMist":"#343434",
+        "CodeBlue":"#3b82f680"
       },
       boxShadow: {
         'soft': '0 4px 6px 0 rgba(0, 0, 0, 0.2)',

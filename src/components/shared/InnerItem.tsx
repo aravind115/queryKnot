@@ -22,10 +22,10 @@ const InnerItem:React.FC<InnerItemProps>=({id,hideIcon,parent,onMove,index})=>{
             isDragging: monitor.isDragging(),
           }),
     })
-    // console.log("isDragging",isDragging)
     const [,dropRef]=useDrop({
         accept:"INNER_ITEM",
-        hover:(draggedItem:any,monitor:any)=>{
+        hover:(draggedItem:any)=>{
+            console.log("draggedItem",draggedItem)
             if (index !== undefined) {
                 onMove?.(index, draggedItem.id);
             }
@@ -37,24 +37,14 @@ const  combinedRef=(node:any)=>{
 };
     if(hideIcon){
         return(
-            <div
-            ref={combinedRef}
-            style={{
-                padding:"10px",
-                border: '1px solid blue',
-                cursor: 'grab',
-                margin: '5px',
-              }}>
+            <div ref={combinedRef} className="innerItem">
                 {id}
             </div>
         )
     }else{
         return(
-            <div
-            ref={ref}
-            style={{cursor: 'grab'}}
-            >
-              <TableCellsIcon style={{width:"25px"}}/>
+            <div ref={ref} className={"cursor-grab"} >
+              <TableCellsIcon className="w-25px"/>
             </div>
         )
     }

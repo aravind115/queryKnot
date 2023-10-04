@@ -15,7 +15,7 @@ function DraggableItem({ item }:{item:DragItem}) {
   });
 
   return (
-    <div className="w-8 h-8 my-5 cursor-pointer hover:text-ceruleanBlue" ref={drag} style={{ opacity: isDragging ? 0.5 : 1 }}>
+    <div className="draggableItemContainer" ref={drag} style={{ opacity: isDragging ? 0.5 : 1 }}>
       {item.icon}
     </div>
   );

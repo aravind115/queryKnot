@@ -1,17 +1,25 @@
-import React, { useState } from "react"
+import React from "react"
 import { useDrag, useDrop } from "react-dnd";
 import InnerItem from "./InnerItem";
 import { ViewColumnsIcon } from "@heroicons/react/24/outline";
 import uuid from 'react-uuid';
-import { InnerItemProps } from "../types";
+import {SchemaItemProps } from "../types";
 interface CanvaProps {
     id?: string,
+    tableName?:string,
     onDelete?: (id: string) => void;
     hideIcon?: boolean;
-    innerItems?: InnerItemProps[];
-    setInnerItems?: React.Dispatch<React.SetStateAction<InnerItemProps[]>>;
+    tableSchema?: SchemaItemProps[];
+    setTableSchema?: React.Dispatch<React.SetStateAction<SchemaItemProps[]>>;
 }
-const Canva: React.FC<CanvaProps> = ({ id, hideIcon, innerItems, setInnerItems }) => {
+const Canva: React.FC<CanvaProps> = (props) => {
+    const { id, hideIcon,tableName,setTableSchema,
+        tableSchema} =props
+    
+        const updateTableSchema =[...tableSchema ||[]]
+        const findTableIndex=updateTableSchema.findIndex(obj=>obj.id===id)
+        const columnItem=updateTableSchema?.[findTableIndex]?.columns
+
     const [, dragRef] = useDrag({
         type: 'CANVA',
         item: { id }
@@ -22,51 +30,57 @@ const Canva: React.FC<CanvaProps> = ({ id, hideIcon, innerItems, setInnerItems }
             parent: string;
             id: string
         }) => {
-            console.log("er")
             const uniqueId = uuid()
             if (item.parent !== "LeftMenu") {
                 return
-            }
-            if (innerItems) {
-                const itemsArray = [...innerItems]
-                itemsArray.push({ id: uniqueId })
-                setInnerItems?.(itemsArray)
-            }
+            }  
+                if(tableSchema){
+                    const updateTableSchema =[...tableSchema]
+                    const findTableIndex=updateTableSchema.findIndex(obj=>obj.id===id)
+                    const columnItem=updateTableSchema?.[findTableIndex]
+                    const updateColumn = {
+                        id:uniqueId,
+                        name:`column-${columnItem?.columns?.length ?? 0}`,
+                        dataType:"VARCHAR",
+                        constraints:"",
+                        length:30
+                    }
+                    columnItem["columns"].push(updateColumn)
+                    setTableSchema?.(updateTableSchema)
+               }
         }
     })
     const handleMove = (dragId: number, hoverId: string) => {
-        if (!innerItems) return; 
-        const dragIndex = innerItems?.findIndex(item => item.id === hoverId);
-        if (innerItems) {
-        const updatedItems = [...innerItems]
-        const [draggedItem] = updatedItems.splice(dragIndex, 1)
-        updatedItems.splice(dragId, 0, draggedItem)
-        setInnerItems?.(updatedItems)
+
+        if(tableSchema){
+            const updateTableSchema =[...tableSchema]
+            const findTableIndex=updateTableSchema.findIndex(obj=>obj.id===id)
+            const tableItem=updateTableSchema?.[findTableIndex]
+            if (!tableItem.columns) return; 
+            const dragIndex = tableItem?.columns?.findIndex(item => item.name === hoverId);
+            
+            const updatedItems = [...tableItem.columns]
+            const [draggedItem] = updatedItems.splice(dragIndex, 1)
+            updatedItems.splice(dragId, 0, draggedItem)
+            
+            tableItem.columns=updatedItems
+
+            setTableSchema?.(updateTableSchema)
         }
     }
     if (hideIcon) {
         return (
-            <div style={{ border: '1px solid black', textAlign: "center" }}>
-                {id}
-                <div
-                    ref={dropRef}
-                    style={{
-                        height:"100px",
-                        border: '1px solid black',
-                        position: 'relative',
-                        display: 'flex',
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                    }}
-                >
+            <div className="canvaContainer">
+                {tableName || id}
+                <div ref={dropRef} className="innerItemContainer">
                     {
-                        innerItems?.map((itemId, index) => {
+                        columnItem?.map((itemId, index) => {
                             return <InnerItem
                                 index={index}
                                 key={itemId.id}
                                 hideIcon={true}
                                 onMove={handleMove}
-                                id={itemId?.label || itemId.id}
+                                id={itemId?.name || itemId.id}
                                 parent="Canvas" />
                         })
                     }

@@ -8,25 +8,25 @@ interface NavLayoutProps{
 const NavLayout=({children}:NavLayoutProps)=>{
 return(  
 <div>   
-<nav className="bg-deepSpace text-platinum border-b-2 border-gunmetal shadow-custom">
-<div className="container mx-auto px-4 py-2 flex justify-between items-center">
+<nav className="topNavContainer">
+<div className="topNavInnerContainer">
     <div className="brand">
         <img src={AppLogo} alt="SQL Designer Logo" className="w-30 mr-2"/>
     </div>
     <div className="secondary-actions hidden md:flex">
-        <div className="mr-4 cursor-pointer hover:text-ceruleanBlue ">
+        <div className="topNavItem">
           <InboxArrowDownIcon className="h-6 w-6"/>
         </div>
-        <div className="mr-4 cursor-pointer hover:text-ceruleanBlue">
+        <div className="topNavItem">
           <ArrowUpTrayIcon className="h-6 w-6"/>
         </div>
-        <div className="mr-4 cursor-pointer hover:text-ceruleanBlue">
+        <div className="topNavItem">
           <ArrowDownTrayIcon className="h-6 w-6"/>
         </div>
-        <div className="mr-4 cursor-pointer hover:text-ceruleanBlue">
+        <div className="topNavItem">
           <PlayIcon className="h-6 w-6"/>
         </div>
-        <div className="mr-4 cursor-pointer hover:text-ceruleanBlue">
+        <div className="topNavItem">
           <span className="text-platinum hover:text-ceruleanBlue">Help/Feedback</span>
         </div>
     </div>
