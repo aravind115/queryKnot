@@ -1,5 +1,4 @@
 
-import { ReactNode } from "react"
 import Canva from "./Canva";
 import InnerItem from "./InnerItem";
 const LeftSideMenu = () => {

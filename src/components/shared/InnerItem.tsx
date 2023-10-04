@@ -1,5 +1,5 @@
 import { TableCellsIcon } from "@heroicons/react/24/outline";
-import React, { Dispatch, useState } from "react";
+import React from "react";
 import { useDrag, useDrop } from "react-dnd";
 interface InnerItemProps {
     id?: string;
@@ -17,7 +17,7 @@ type DraggedItemType = {
     parent: string;
 };
 const InnerItem: React.FC<InnerItemProps> = ({ id, hideIcon, parent, onMove, index, name, activeId, handleColSelection }) => {
-    const [{ isDragging }, ref] = useDrag({
+    const [,ref] = useDrag({
         type: 'INNER_ITEM',
         item: { id, parent } as DraggedItemType,
         collect: monitor => ({

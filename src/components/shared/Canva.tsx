@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useState } from "react"
+import React, { Dispatch, SetStateAction } from "react"
 import { useDrag, useDrop } from "react-dnd";
 import InnerItem from "./InnerItem";
 import { ViewColumnsIcon } from "@heroicons/react/24/outline";
