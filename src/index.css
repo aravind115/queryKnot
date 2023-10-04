@@ -40,7 +40,7 @@
 .topNavInnerContainer{
    @apply container mx-auto px-4 py-2 flex justify-between items-center
 }
-.topNav{
+.topNavItem{
    @apply mr-4 cursor-pointer hover:text-ceruleanBlue
 }
 .canvasArea{

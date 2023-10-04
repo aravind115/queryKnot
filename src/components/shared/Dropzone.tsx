@@ -1,20 +1,16 @@
-import { Dispatch, SetStateAction, useState } from "react"
+import { Dispatch, SetStateAction } from "react"
 import { useDrop } from "react-dnd"
 import Canva from "./Canva"
 import {SchemaItemProps, activeTableProps } from "../types";
 import uuid from "react-uuid";
 interface DropzoneProps {
-  setCopyText?:Dispatch<SetStateAction<string[]>>;
-  copyText?: string[];
   tableSchema?: SchemaItemProps[];
   setTableSchema?: Dispatch<React.SetStateAction<SchemaItemProps[]>>;
   activeId?:activeTableProps;
   setActiveId?:Dispatch<SetStateAction<activeTableProps | undefined>>
-
 }
 const Dropzone = (props: DropzoneProps) => {
   const {
-    setCopyText,
     setTableSchema,
     tableSchema,
     activeId,
@@ -27,23 +23,24 @@ const Dropzone = (props: DropzoneProps) => {
       let tableName: string = prompt("enter table name") as string;
       if (tableName !== null) {
         tableName = tableName.replace(/\s+/g, '_').toLowerCase();
-
+        const tableId=uuid()
+        const columnId=uuid()
         /* for global object */
         const newSchemaItem: SchemaItemProps = {
-          id: uuid(),
+          id: tableId,
           tableName: tableName,
           columns: [{
-            id: uuid(),
+            id: columnId,
             name: "id",
             dataType: "INTEGER",
             constraints: "PRIMARY KEY",
-            length:30
+            length:"30"
           }]
         }
+
         setTableSchema?.(prev => [...prev, newSchemaItem])
+        setActiveId?.({tableId:tableId,columnId:columnId})
         /* for global object */
-        const sqlCommand = `CREATE TABLE ${tableName} (id INTEGER PRIMARY KEY);`;
-        setCopyText?.(prev => [...prev, sqlCommand]);
       }
     },
   })

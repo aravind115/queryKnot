@@ -45,7 +45,7 @@ const Canva: React.FC<CanvaProps> = (props) => {
                         name:`column-${columnItem?.columns?.length ?? 0}`,
                         dataType:"VARCHAR",
                         constraints:"",
-                        length:30
+                        length:"30"
                     }
                     columnItem["columns"].push(updateColumn)
                     setTableSchema?.(updateTableSchema)

@@ -1,118 +1,155 @@
-import { Dispatch, ReactNode, SetStateAction, useEffect, useState } from "react"
-import DraggableItem from "../shared/DraggableItem";
+import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import DropdownMenu from "../UIComponents/DropdownMenu";
 import InputBox from "../UIComponents/InputBox";
-import { SchemaItemProps, activeTableProps } from "../types";
+import _ from 'lodash';
+import { ColumnSchema, SchemaItemProps, activeTableProps } from "../types";
 
-interface RightSideMenuProps{
-  tableSchema:SchemaItemProps[];
-  setTableSchema:Dispatch<SetStateAction<SchemaItemProps[]>>;
-  activeId:activeTableProps | undefined;
+interface RightSideMenuProps {
+  tableSchema: SchemaItemProps[];
+  setTableSchema: Dispatch<SetStateAction<SchemaItemProps[]>>;
+  activeId: activeTableProps | undefined;
 }
-type formValues={
-  name:string;
-  dataType:string;
-  length:string;
-  constraints?:string;
-  id?:string
+type formValues = {
+  name: string;
+  dataType: string;
+  length: string;
+  constraints?: string;
+  id?: string
 }
 
-  const  RightSideMenu=(props:RightSideMenuProps)=>{
-    const {
-      activeId,
-      setTableSchema,
-      tableSchema
-    }=props
-    const [formValues,setFormvalues]=useState<formValues>({
-      name:"",
-      dataType:"",
-      length:"",
-      constraints:"",
-      id:""
-    })
-    useEffect(()=>{
-      if(activeId){
-        const getTableObj=tableSchema.filter(obj=>obj.id === activeId?.tableId)
-        const readColumnsValue=getTableObj[0].columns.filter(obj=>obj.id===activeId.columnId)[0]
-        setFormvalues(readColumnsValue)
-        console.log(readColumnsValue)
+const RightSideMenu = (props: RightSideMenuProps) => {
+  const {
+    activeId,
+    setTableSchema,
+    tableSchema
+  } = props
+  const [formValues, setFormValues] = useState<formValues>({
+    name: "",
+    dataType: "",
+    length: "",
+    constraints: "",
+    id: ""
+  })
+  useEffect(() => {
+    if (activeId) {
+      const getTableObj = tableSchema.find(obj => obj.id === activeId?.tableId);
+      if (getTableObj) {
+        const readColumnsValue = getTableObj.columns.find(col => col.id === activeId.columnId);
+        if (readColumnsValue) {
+          setFormValues(readColumnsValue);
+        }
       }
-    },[activeId])
-    const constraint=[
-      { id: 'PRIMARY_KEY', label: 'primaryKey' },
-      { id: 'FOREIGN_KEY', label: 'foreignKey' },
-      { id: 'UNIQUE', label: 'unique' },
-      { id: 'NOT_NULL', label: 'notNull' },
-      { id: 'CHECK', label: 'check' },
-      { id: 'DEFAULT', label: 'default' },
-      { id: 'INDEX', label: 'index' },
-      { id: 'AUTO_INCREMENT', label: 'autoIncrement' },
-      { id: 'SERIAL', label: 'serial' }  // Specifically for PostgreSQL and some others
-    ]
-    const dataTypeOptions =[
-        { id: 'INTEGER', label: 'integer' },
-        { id: 'VARCHAR', label: 'varChar' },
-        { id: 'CHAR', label: 'char' },
-        { id: 'TEXT', label: 'text' },
-        { id: 'DATE', label: 'date' },
-        { id: 'TIMESTAMP', label: 'timeStamp' },
-        { id: 'BOOLEAN', label: 'boolean' },
-        { id: 'FLOAT', label: 'float' },
-        { id: 'DOUBLE', label: 'double' },
-        { id: 'DECIMAL', label: 'decimal' },
-        { id: 'BINARY', label: 'binary' },
-        { id: 'BLOB', label: 'blob' },
-        { id: 'BIGINT', label: 'bigInt' },
-        { id: 'SMALLINT', label: 'smallInt' },
-        { id: 'TINYINT', label: 'tinyInt' },
-        { id: 'BIT', label: 'bit' },
-        { id: 'ENUM', label: 'enum' },
-        { id: 'SET', label: 'set' },
-        { id: 'DATETIME', label: 'dateTime' },
-        { id: 'TIME', label: 'time' },
-        { id: 'YEAR', label: 'year' },
-        { id: 'JSON', label: 'json' },
-        { id: 'UUID', label: 'uuid' },
-        { id: 'CLOB', label: 'clob' }
-      ];
+    }
+  }, [activeId])
+  const constraint = [
+    { id: 'PRIMARY_KEY', label: 'PRIMARY_KEY' },
+    { id: 'FOREIGN_KEY', label: 'FOREIGN_KEY' },
+    { id: 'UNIQUE', label: 'UNIQUE' },
+    { id: 'NOT_NULL', label: 'NOT_NULL' },
+    { id: 'CHECK', label: 'CHECK' },
+    { id: 'DEFAULT', label: 'DEFAULT' },
+    { id: 'INDEX', label: 'INDEX' },
+    { id: 'AUTO_INCREMENT', label: 'AUTO_INCREMENT' },
+    { id: 'SERIAL', label: 'SERIAL' }
+];
 
-      return(
-        <div className="rightNavContainer">
-        <InputBox 
-        label="Column Name" 
-        placeholder="Enter Column Name" 
-        id="columnLength" 
-        onChange={(value) => console.log(value)}
-        value={formValues?.name || ""} />
+  const dataTypeOptions = [
+    { id: 'INTEGER', label: 'INTEGER' },
+    { id: 'VARCHAR', label: 'VARCHAR' },
+    { id: 'CHAR', label: 'CHAR' },
+    { id: 'TEXT', label: 'TEXT' },
+    { id: 'DATE', label: 'DATE' },
+    { id: 'TIMESTAMP', label: 'TIMESTAMP' },
+    { id: 'BOOLEAN', label: 'BOOLEAN' },
+    { id: 'FLOAT', label: 'FLOAT' },
+    { id: 'DOUBLE', label: 'DOUBLE' },
+    { id: 'DECIMAL', label: 'DECIMAL' },
+    { id: 'BINARY', label: 'BINARY' },
+    { id: 'BLOB', label: 'BLOB' },
+    { id: 'BIGINT', label: 'BIGINT' },
+    { id: 'SMALLINT', label: 'SMALLINT' },
+    { id: 'TINYINT', label: 'TINYINT' },
+    { id: 'BIT', label: 'BIT' },
+    { id: 'ENUM', label: 'ENUM' },
+    { id: 'SET', label: 'SET' },
+    { id: 'DATETIME', label: 'DATETIME' },
+    { id: 'TIME', label: 'TIME' },
+    { id: 'YEAR', label: 'YEAR' },
+    { id: 'JSON', label: 'JSON' },
+    { id: 'UUID', label: 'UUID' },
+    { id: 'CLOB', label: 'CLOB' }
+];
 
-        <DropdownMenu  
-        label="Data Types:"
-        options={dataTypeOptions}
-        onSelect={(selectedOption) => {
-          console.log('Selected:', selectedOption);
-        }}
-        value={formValues?.dataType || dataTypeOptions[0].label }
-        />
+  const handleFromChange = (key: keyof ColumnSchema, value: any) => {
+    const clonedTableSchema = _.cloneDeep(tableSchema); // Create a deep copy
+    const getTableObj = clonedTableSchema.find((obj: SchemaItemProps) => obj.id === activeId?.tableId);
+    let columnObj: ColumnSchema | undefined;
 
-        <InputBox 
-        label="Column Length" 
-        placeholder="Enter column length" 
-        id="columnLength" 
-        onChange={(value) => console.log(value)} 
-        value={formValues?.length || ""}/>
-        
-        <DropdownMenu  
-        label="Constraints:"
-        options={constraint}
-        onSelect={(selectedOption) => {
-          console.log('Selected:', selectedOption);
-        }}
-        value={formValues?.constraints || constraint[0].label}
-        />
-        
-      </div>
-      )
-
-
+    if (getTableObj) {
+      columnObj = getTableObj.columns.find((col: ColumnSchema) => col.id === activeId?.columnId);
+      if (columnObj) {
+        columnObj[key] = value;
+      }
+    }
+    if (columnObj !== undefined) {
+      setFormValues(columnObj);
+      setTableSchema(clonedTableSchema)
+    }
   }
-  export default RightSideMenu
+
+  if(activeId){
+    return (
+      <div className="rightNavContainer">
+        <InputBox
+          label="Column Name"
+          placeholder="Enter Column Name"
+          id="columnLength"
+          onChange={(value) => handleFromChange("name", value)}
+          value={formValues?.name || ""} />
+  
+        <DropdownMenu
+          label="Data Types:"
+          options={dataTypeOptions}
+          onSelect={(selectedOption) => {
+            handleFromChange("dataType", selectedOption.id)
+            console.log('Selected:', selectedOption);
+          }}
+          value={formValues?.dataType || dataTypeOptions[0].label}
+        />
+  
+        <InputBox
+          label="Column Length"
+          placeholder="Enter column length"
+          id="columnLength"
+          onChange={(value) => /^\d*$/g.test(value) && handleFromChange("length", value)}
+          value={formValues?.length || ""} />
+  
+        <DropdownMenu
+          label="Constraints:"
+          options={constraint}
+          onSelect={(selectedOption) => {
+            handleFromChange("constraints", selectedOption.id)
+            console.log('Selected:', selectedOption);
+          }}
+          value={formValues?.constraints || constraint[0].label}
+        />
+  
+      </div>
+    )
+  }else{
+    return(
+      <div className="rightNavContainer">
+  <h1 className="font-bold mb-4">Welcome to Query knot</h1>
+  <p className="mb-2">Effortlessly generate SQL code with our drag-and-drop interface:</p>
+  <ul className="list-disc pl-5 mb-4">
+    <li className="mb-2">Simply drag tables and columns into our workspace, and SQLGen will instantly craft the SQL command for you.</li>
+    <li className="mb-2">Click on tables or columns to highlight and easily adjust your query.</li>
+    <li className="mb-2">Rearrange tables and columns, and SQLGen instantly updates the SQL command in real-time.</li>
+    <li>After finalizing your command, easily copy it from our dedicated area, ready for execution.</li>
+  </ul>
+  <p>Experience effortless query creation with SQLGen. No SQL expertise needed.</p>
+  </div>
+    )
+  }
+}
+export default RightSideMenu
