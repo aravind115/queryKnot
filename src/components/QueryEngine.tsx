@@ -35,7 +35,7 @@ const sqlToMongoDBType = (dataType: string): string => {
         case 'DATE':
         case 'DATETIME': return 'date';
         case 'BOOLEAN': return 'bool';
-        default: return 'mixed'; // This maps to a generic type
+        default: return 'mixed'; 
     }
 };
 
