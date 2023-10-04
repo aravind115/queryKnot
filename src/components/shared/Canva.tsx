@@ -1,20 +1,22 @@
-import React from "react"
+import React, { Dispatch, SetStateAction, useState } from "react"
 import { useDrag, useDrop } from "react-dnd";
 import InnerItem from "./InnerItem";
 import { ViewColumnsIcon } from "@heroicons/react/24/outline";
 import uuid from 'react-uuid';
-import {SchemaItemProps } from "../types";
+import {SchemaItemProps, activeTableProps } from "../types";
 interface CanvaProps {
     id?: string,
     tableName?:string,
     onDelete?: (id: string) => void;
     hideIcon?: boolean;
     tableSchema?: SchemaItemProps[];
-    setTableSchema?: React.Dispatch<React.SetStateAction<SchemaItemProps[]>>;
+    setTableSchema?:Dispatch<SetStateAction<SchemaItemProps[]>>;
+    activeId?:activeTableProps;
+    setActiveId?:Dispatch<SetStateAction<activeTableProps | undefined>>
 }
 const Canva: React.FC<CanvaProps> = (props) => {
     const { id, hideIcon,tableName,setTableSchema,
-        tableSchema} =props
+        tableSchema, activeId,setActiveId} =props
     
         const updateTableSchema =[...tableSchema ||[]]
         const findTableIndex=updateTableSchema.findIndex(obj=>obj.id===id)
@@ -68,10 +70,19 @@ const Canva: React.FC<CanvaProps> = (props) => {
             setTableSchema?.(updateTableSchema)
         }
     }
+
+    const handleColSelection=(colId:string)=>{
+        if(id && colId){
+            setActiveId?.({
+                tableId:id,
+                columnId:colId
+            })
+        }
+    }
     if (hideIcon) {
         return (
             <div className="canvaContainer">
-                {tableName || id}
+                {tableName}
                 <div ref={dropRef} className="innerItemContainer">
                     {
                         columnItem?.map((itemId, index) => {
@@ -80,8 +91,11 @@ const Canva: React.FC<CanvaProps> = (props) => {
                                 key={itemId.id}
                                 hideIcon={true}
                                 onMove={handleMove}
-                                id={itemId?.name || itemId.id}
-                                parent="Canvas" />
+                                id={itemId?.id}
+                                name={itemId?.name}
+                                parent="Canvas"
+                                activeId={activeId?.columnId}
+                                handleColSelection={handleColSelection} />
                         })
                     }
                 </div>

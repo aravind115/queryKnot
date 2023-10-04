@@ -2,13 +2,14 @@ import LeftSideMenu from "./shared/LeftSideMenu";
 import RightSideMenu from "./shared/RightSideMenu";
 import Dropzone from "./shared/Dropzone";
 import { useEffect, useState } from "react";
-import { SchemaItemProps } from "./types";
+import { SchemaItemProps, activeTableProps } from "./types";
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { ClipboardIcon } from "@heroicons/react/24/outline";
 
 const AppLayout = () => {
   const [tableSchema, setTableSchema] = useState<SchemaItemProps[]>([])
   const [copyText, setCopyText] = useState<string[]>([]);
+  const [activeId,setActiveId]=useState<activeTableProps | undefined>()
   const handleCopy = () => {
     alert('Content copied to clipboard!');
   };
@@ -26,11 +27,13 @@ const AppLayout = () => {
           tableSchema={tableSchema}
           setTableSchema={setTableSchema}
           copyText={copyText}
+          activeId={activeId}
+          setActiveId={setActiveId}
         />
         <div className="clipboardArea" style={{height:"50%"}}>
           <div className="relative w-full h-full">
             <CopyToClipboard text={copyText.join()} onCopy={handleCopy}>
-              <ClipboardIcon className="m-2 absolute top-2 right-2 cursor-pointer w-25px" />
+              <ClipboardIcon className="m-2 absolute top-2 right-2 cursor-pointer w-25px text-platinum" />
             </CopyToClipboard>
 
             <textarea
@@ -44,7 +47,11 @@ const AppLayout = () => {
       </div>
 
       {/* Right navbar */}
-      <RightSideMenu />
+      <RightSideMenu 
+      tableSchema={tableSchema}
+      setTableSchema={setTableSchema}
+      activeId={activeId}
+      />
     </div>
   )
 }

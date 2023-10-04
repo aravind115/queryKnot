@@ -10,10 +10,11 @@ interface DropdownMenuProps {
   label: string;
   options: Option[];
   onSelect: (option: Option) => void;
+  value?:string;
 }
 
 const DropdownMenu = (props: DropdownMenuProps) => {
-  const { label, options, onSelect } = props;
+  const { label, options, onSelect,value } = props;
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
@@ -38,7 +39,7 @@ const DropdownMenu = (props: DropdownMenuProps) => {
           onClick={() => setIsOpen(!isOpen)}
           className="dropdownButtonStyle"
         >
-          Options
+          {value}
          <ChevronDownIcon className="w-5"/>
         </button>
       </div>

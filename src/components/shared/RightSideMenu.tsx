@@ -1,10 +1,43 @@
-import { ReactNode, useState } from "react"
+import { Dispatch, ReactNode, SetStateAction, useEffect, useState } from "react"
 import DraggableItem from "../shared/DraggableItem";
 import DropdownMenu from "../UIComponents/DropdownMenu";
 import InputBox from "../UIComponents/InputBox";
+import { SchemaItemProps, activeTableProps } from "../types";
 
+interface RightSideMenuProps{
+  tableSchema:SchemaItemProps[];
+  setTableSchema:Dispatch<SetStateAction<SchemaItemProps[]>>;
+  activeId:activeTableProps | undefined;
+}
+type formValues={
+  name:string;
+  dataType:string;
+  length:string;
+  constraints?:string;
+  id?:string
+}
 
-  const  RightSideMenu=()=>{
+  const  RightSideMenu=(props:RightSideMenuProps)=>{
+    const {
+      activeId,
+      setTableSchema,
+      tableSchema
+    }=props
+    const [formValues,setFormvalues]=useState<formValues>({
+      name:"",
+      dataType:"",
+      length:"",
+      constraints:"",
+      id:""
+    })
+    useEffect(()=>{
+      if(activeId){
+        const getTableObj=tableSchema.filter(obj=>obj.id === activeId?.tableId)
+        const readColumnsValue=getTableObj[0].columns.filter(obj=>obj.id===activeId.columnId)[0]
+        setFormvalues(readColumnsValue)
+        console.log(readColumnsValue)
+      }
+    },[activeId])
     const constraint=[
       { id: 'PRIMARY_KEY', label: 'primaryKey' },
       { id: 'FOREIGN_KEY', label: 'foreignKey' },
@@ -43,12 +76,14 @@ import InputBox from "../UIComponents/InputBox";
         { id: 'CLOB', label: 'clob' }
       ];
 
-
-
-
       return(
         <div className="rightNavContainer">
-        <InputBox label="Column Name" placeholder="Enter Column Name" id="columnLength" onChange={(value) => console.log(value)} />
+        <InputBox 
+        label="Column Name" 
+        placeholder="Enter Column Name" 
+        id="columnLength" 
+        onChange={(value) => console.log(value)}
+        value={formValues?.name || ""} />
 
         <DropdownMenu  
         label="Data Types:"
@@ -56,9 +91,15 @@ import InputBox from "../UIComponents/InputBox";
         onSelect={(selectedOption) => {
           console.log('Selected:', selectedOption);
         }}
+        value={formValues?.dataType || dataTypeOptions[0].label }
         />
 
-        <InputBox label="Column Length" placeholder="Enter column length" id="columnLength" onChange={(value) => console.log(value)} />
+        <InputBox 
+        label="Column Length" 
+        placeholder="Enter column length" 
+        id="columnLength" 
+        onChange={(value) => console.log(value)} 
+        value={formValues?.length || ""}/>
         
         <DropdownMenu  
         label="Constraints:"
@@ -66,6 +107,7 @@ import InputBox from "../UIComponents/InputBox";
         onSelect={(selectedOption) => {
           console.log('Selected:', selectedOption);
         }}
+        value={formValues?.constraints || constraint[0].label}
         />
         
       </div>

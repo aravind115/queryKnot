@@ -24,6 +24,7 @@ export default {
       backgroundColor: {
         'deepSpace': '#1E1E1E',
         'eclipse': '#3C3C3C',
+        'ceruleanBlue': '#007ACC',
       },
       textColor: {
         'platinum': '#E5E5E5',

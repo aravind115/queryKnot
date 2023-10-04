@@ -1,19 +1,24 @@
-import { useState } from "react"
+import { Dispatch, SetStateAction, useState } from "react"
 import { useDrop } from "react-dnd"
 import Canva from "./Canva"
-import { InnerItemProps, SchemaItemProps } from "../types";
+import {SchemaItemProps, activeTableProps } from "../types";
 import uuid from "react-uuid";
 interface DropzoneProps {
-  setCopyText?: React.Dispatch<React.SetStateAction<string[]>>;
+  setCopyText?:Dispatch<SetStateAction<string[]>>;
   copyText?: string[];
   tableSchema?: SchemaItemProps[];
-  setTableSchema?: React.Dispatch<React.SetStateAction<SchemaItemProps[]>>;
+  setTableSchema?: Dispatch<React.SetStateAction<SchemaItemProps[]>>;
+  activeId?:activeTableProps;
+  setActiveId?:Dispatch<SetStateAction<activeTableProps | undefined>>
+
 }
 const Dropzone = (props: DropzoneProps) => {
   const {
     setCopyText,
     setTableSchema,
     tableSchema,
+    activeId,
+    setActiveId
   } = props
 
   const [, ref] = useDrop({
@@ -61,6 +66,8 @@ const Dropzone = (props: DropzoneProps) => {
               hideIcon={true}
               setTableSchema={setTableSchema}
               tableSchema={tableSchema}
+              activeId={activeId}
+              setActiveId={setActiveId}
             />
           )
         })
