@@ -5,42 +5,29 @@ import { useEffect, useState } from "react";
 import { SchemaItemProps, activeTableProps } from "./types";
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { ClipboardIcon } from "@heroicons/react/24/outline";
+import { createMongoDBCommandsFromData, createSQLFromSchemas } from "./QueryEngine";
 
 const AppLayout = () => {
   const [tableSchema, setTableSchema] = useState<SchemaItemProps[]>([])
   const [copyText, setCopyText] = useState<string>();
+  const [NoSQLcopyText, setNoSQlCopyText] = useState<string>();
   const [activeId,setActiveId]=useState<activeTableProps | undefined>()
   const handleCopy = () => {
     alert('Content copied to clipboard!');
   };
 
-  const createTableFromSchema = (schema: SchemaItemProps): string => {
-    const { tableName, columns } = schema;
-    const columnDefs = columns.map(({ name, dataType, length, constraints }) => {
-      let columnStr = `${name} ${dataType}`;
-      if (length) {
-        columnStr += `(${length})`;
-      }
-      if (constraints) {
-        columnStr += ` ${constraints}`;
-      }
-      return columnStr;
-    });
-    return `CREATE TABLE ${tableName} (\n    ${columnDefs.join(',\n    ')}\n);`;
-  };
-  const createSQLFromSchemas = (tableSchemas:SchemaItemProps[]): string => {
-    const sqlStatements = tableSchemas.map(schema => createTableFromSchema(schema));
-    if (tableSchemas.length > 1) {
-        return `BEGIN;\n\n${sqlStatements.join('\n\n')}\n\nCOMMIT;`;
-    } else {
-        return sqlStatements[0];
-    }
-};
+  
 
   useEffect(() => {
     const fullSQL = createSQLFromSchemas(tableSchema);
+    const mongoDBCommands = createMongoDBCommandsFromData(tableSchema);
     setCopyText(fullSQL)
+    setNoSQlCopyText(mongoDBCommands)
+
+
   }, [tableSchema])
+
+  console.log(tableSchema)
   return (
     <div className="flex h-screen overflow-hidden justify-between">
       {/* Left navbar */}
@@ -53,8 +40,14 @@ const AppLayout = () => {
           activeId={activeId}
           setActiveId={setActiveId}
         />
+
+        
         <div className="clipboardArea" style={{height:"50%"}}>
-          <div className="relative w-full h-full">
+          <div className="flex h-full">
+            
+            <div className="w-1/2 bg-eclipse text-platinum p-2 border-r border-solid border-outerSpace">
+            <label>PSQL Query</label>
+            <div className="relative w-full h-full">
             <CopyToClipboard text={copyText ?? ""} onCopy={handleCopy}>
               <ClipboardIcon className="m-2 absolute top-2 right-2 cursor-pointer w-25px text-platinum" />
             </CopyToClipboard>
@@ -66,6 +59,26 @@ const AppLayout = () => {
             >
             </textarea>
           </div>
+          {/* No SQL */}
+            </div>
+            <div className="w-1/2 bg-eclipse text-platinum p-2">
+            <label>NoSQL Query</label>
+            <div className="relative w-full h-full">
+            <CopyToClipboard text={NoSQLcopyText ?? ""} onCopy={handleCopy}>
+              <ClipboardIcon className="m-2 absolute top-2 right-2 cursor-pointer w-25px text-platinum" />
+            </CopyToClipboard>
+
+            <textarea
+              className="textArea"
+              value={NoSQLcopyText}
+              readOnly
+            >
+            </textarea>
+          </div>
+            </div>
+
+          </div>
+
         </div>
       </div>
 
