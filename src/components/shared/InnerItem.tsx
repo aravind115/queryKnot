@@ -1,6 +1,6 @@
 import { TableCellsIcon } from "@heroicons/react/24/outline";
 import React, { useRef } from "react";
-import { DropTargetMonitor, useDrag, useDrop } from "react-dnd";
+import {useDrag, useDrop } from "react-dnd";
 interface InnerItemProps {
     id?: string;
     onDelete?: () => void;
