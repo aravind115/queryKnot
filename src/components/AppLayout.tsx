@@ -4,8 +4,7 @@ import Dropzone from "./shared/Dropzone";
 import { useEffect, useState } from "react";
 import { SchemaItemProps, activeTableProps } from "./types";
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { ClipboardIcon } from "@heroicons/react/24/outline";
-import { createMongoDBCommandsFromData, createSQLFromSchemas,convertSQLToJSONSchema,convertMongoDBToJSONSchema } from "./QueryEngine";
+import { createMongoDBCommandsFromData, createSQLFromSchemas,convertSQLToJSONSchema, } from "./QueryEngine";
 import DropdownMenu from "./UIComponents/DropdownMenu";
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 const AppLayout = () => {

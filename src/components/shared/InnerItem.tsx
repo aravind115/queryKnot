@@ -17,7 +17,7 @@ type DraggedItemType = {
     parent: string;
     index?: number; 
 };
-const InnerItem: React.FC<InnerItemProps> = ({ id, hideIcon, parent, onMove, index, name, activeId, handleColSelection }) => {
+const InnerItem: React.FC<InnerItemProps> = ({ id, hideIcon, parent,name, activeId, handleColSelection }) => {
     const elementRef = useRef<HTMLDivElement | null>(null);
    
     const [,ref] = useDrag({
@@ -34,9 +34,9 @@ const InnerItem: React.FC<InnerItemProps> = ({ id, hideIcon, parent, onMove, ind
         //         onMove?.(index, draggedItem.id);
         //     }
         // },
-        hover: (draggedItem: DraggedItemType, monitor: DropTargetMonitor) => {
-            return 
-        }
+        // hover: (draggedItem: DraggedItemType, monitor: DropTargetMonitor) => {
+        //     return 
+        // }
     })
     const combinedRef = (node: any) => {
         ref(node);

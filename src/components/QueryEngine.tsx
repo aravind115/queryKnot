@@ -148,7 +148,7 @@ export function convertSQLToJSONSchema(sql: string): string {
       };
       
       for (let i = 1; i < lines.length - 1; i++) {
-          const [field, typeLength, ...rest] = lines[i].split(' ');
+          const [field, typeLength] = lines[i].split(' ');
           const [type, length] = typeLength ? typeLength.split('(') : [];
           const name = field.replace(',', '');
           const property: any = {
@@ -185,7 +185,7 @@ export function convertMongoDBToJSONSchema(
     collectionName: string,
     schemaDefinition: MongoDBSchema
   ): string {
-    const requiredFields = schemaDefinition.validator.$jsonSchema.required || {};
+    const requiredFields:any = schemaDefinition.validator.$jsonSchema.required ?? {};
     const properties: { [key: string]: JSONSchemaField } = {};
   
     for (const field in schemaDefinition.validator.$jsonSchema.properties) {
