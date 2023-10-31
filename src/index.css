@@ -17,7 +17,7 @@
     @apply border border-black text-center
 }
 .innerItemContainer{
-    @apply h-25 border border-black relative flex items-center
+    @apply h-32 border border-black relative flex items-center
 }
 .innerContainer{
     @apply h-25 border border-black relative flex flex-col items-center w-12

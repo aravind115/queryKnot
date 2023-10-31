@@ -13,7 +13,11 @@
     "deploy": "gh-pages -d dist \"deploy\""
   },
   "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
     "@heroicons/react": "^2.0.18",
+    "@mui/icons-material": "^5.14.12",
+    "@mui/material": "^5.14.12",
     "autoprefixer": "^10.4.16",
     "lodash": "^4.17.21",
     "postcss": "^8.4.30",
