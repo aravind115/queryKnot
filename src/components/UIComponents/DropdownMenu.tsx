@@ -7,7 +7,7 @@ interface Option {
 }
 
 interface DropdownMenuProps {
-  label: string;
+  label?: string;
   options: Option[];
   onSelect: (option: Option) => void;
   value?:string;

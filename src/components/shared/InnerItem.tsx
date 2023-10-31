@@ -1,6 +1,6 @@
 import { TableCellsIcon } from "@heroicons/react/24/outline";
-import React from "react";
-import { useDrag, useDrop } from "react-dnd";
+import React, { useRef } from "react";
+import { DropTargetMonitor, useDrag, useDrop } from "react-dnd";
 interface InnerItemProps {
     id?: string;
     onDelete?: () => void;
@@ -15,8 +15,11 @@ interface InnerItemProps {
 type DraggedItemType = {
     id: string;
     parent: string;
+    index?: number; 
 };
 const InnerItem: React.FC<InnerItemProps> = ({ id, hideIcon, parent, onMove, index, name, activeId, handleColSelection }) => {
+    const elementRef = useRef<HTMLDivElement | null>(null);
+   
     const [,ref] = useDrag({
         type: 'INNER_ITEM',
         item: { id, parent } as DraggedItemType,
@@ -26,14 +29,18 @@ const InnerItem: React.FC<InnerItemProps> = ({ id, hideIcon, parent, onMove, ind
     })
     const [, dropRef] = useDrop({
         accept: "INNER_ITEM",
-        hover: (draggedItem: any) => {
-            if (index !== undefined) {
-                onMove?.(index, draggedItem.id);
-            }
-        },
+        // hover: (draggedItem: any) => {
+        //     if (index !== undefined) {
+        //         onMove?.(index, draggedItem.id);
+        //     }
+        // },
+        hover: (draggedItem: DraggedItemType, monitor: DropTargetMonitor) => {
+            return 
+        }
     })
     const combinedRef = (node: any) => {
         ref(node);
+        elementRef.current = node;
         dropRef(node)
     };
     if (hideIcon) {
@@ -51,4 +58,5 @@ const InnerItem: React.FC<InnerItemProps> = ({ id, hideIcon, parent, onMove, ind
     }
 
 }
-export default InnerItem
+export default React.memo(InnerItem);
+// export default InnerItem

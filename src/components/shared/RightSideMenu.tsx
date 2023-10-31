@@ -42,14 +42,14 @@ const RightSideMenu = (props: RightSideMenuProps) => {
     }
   }, [activeId])
   const constraint = [
-    { id: 'PRIMARY_KEY', label: 'PRIMARY_KEY' },
-    { id: 'FOREIGN_KEY', label: 'FOREIGN_KEY' },
+    { id: 'PRIMARY_KEY', label: 'PRIMARY KEY' },
+    { id: 'FOREIGN_KEY', label: 'FOREIGN KEY' },
     { id: 'UNIQUE', label: 'UNIQUE' },
-    { id: 'NOT_NULL', label: 'NOT_NULL' },
+    { id: 'NOT_NULL', label: 'NOT NULL' },
     { id: 'CHECK', label: 'CHECK' },
     { id: 'DEFAULT', label: 'DEFAULT' },
     { id: 'INDEX', label: 'INDEX' },
-    { id: 'AUTO_INCREMENT', label: 'AUTO_INCREMENT' },
+    { id: 'AUTO_INCREMENT', label: 'AUTO INCREMENT' },
     { id: 'SERIAL', label: 'SERIAL' }
 ];
 
