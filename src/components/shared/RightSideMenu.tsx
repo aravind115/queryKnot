@@ -149,7 +149,7 @@ const RightSideMenu = (props: RightSideMenuProps) => {
   }else{
     return(
       <div className="rightNavContainer">
-  <h1 className="font-bold mb-4">Welcome to Query knot</h1>
+  <h1 className="font-bold mb-4">Welcome to  Schema config tool</h1>
   <p className="mb-2">Effortlessly generate SQL code with our drag-and-drop interface:</p>
   <ul className="list-disc pl-5 mb-4">
     <li className="mb-2">Simply drag tables and columns into our workspace, and SQLGen will instantly craft the SQL command for you.</li>
