@@ -51,8 +51,9 @@ const InnerItem: React.FC<InnerItemProps> = ({ id, hideIcon, parent,name, active
         )
     } else {
         return (
-            <div ref={ref} className={"cursor-grab"} >
-                <TableCellsIcon className="w-25px" />
+             <div ref={ref} className={"cursor-grab box-border h-auto w-20 h-20 p-2 border m-1 hover:border-CodeBlue hover:text-ceruleanBlue"} >
+                <TableCellsIcon style={{width:'32px', margin:"auto"}} />
+                <label>Column</label>
             </div>
         )
     }

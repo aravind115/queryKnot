@@ -42,7 +42,7 @@ const Canva: React.FC<CanvaProps> = (props) => {
                     const columnItem=updateTableSchema?.[findTableIndex]
                     const updateColumn = {
                         id:uniqueId,
-                        name:`column-${columnItem?.columns?.length ?? 0}`,
+                        name:`column_${columnItem?.columns?.length ?? 0}`,
                         dataType:"VARCHAR",
                         constraints:"",
                         length:"30"
@@ -107,8 +107,10 @@ const Canva: React.FC<CanvaProps> = (props) => {
                 <div
                     ref={dragRef}
                     style={{ cursor: 'grab' }}
+                    className={"cursor-grab box-border h-auto w-20 h-20 p-2 border m-1 hover:border-CodeBlue hover:text-ceruleanBlue"}
                 >
-                    <ViewColumnsIcon style={{ width: "25px" }} />
+                    <ViewColumnsIcon style={{width:'32px', margin:"auto"}}/>
+                    <label>Table</label>
                 </div>
             </>
         )

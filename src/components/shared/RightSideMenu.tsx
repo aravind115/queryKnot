@@ -40,7 +40,7 @@ const RightSideMenu = (props: RightSideMenuProps) => {
         }
       }
     }
-  }, [activeId])
+0  }, [activeId])
   const constraint = [
     { id: 'PRIMARY_KEY', label: 'PRIMARY KEY' },
     { id: 'FOREIGN_KEY', label: 'FOREIGN KEY' },
@@ -81,15 +81,21 @@ const RightSideMenu = (props: RightSideMenuProps) => {
 ];
 
   const handleFromChange = (key: keyof ColumnSchema, value: any) => {
+
     const clonedTableSchema = _.cloneDeep(tableSchema); // Create a deep copy
     const getTableObj = clonedTableSchema.find((obj: SchemaItemProps) => obj.id === activeId?.tableId);
     let columnObj: ColumnSchema | undefined;
-
     if (getTableObj) {
       columnObj = getTableObj.columns.find((col: ColumnSchema) => col.id === activeId?.columnId);
+    console.log({key,value,columnObj})
+     
       if (columnObj) {
         columnObj[key] = value;
+        if(value==="INTEGER"){
+          columnObj["length"] = "";
+        }
       }
+     
     }
     if (columnObj !== undefined) {
       setFormValues(columnObj);
@@ -117,12 +123,16 @@ const RightSideMenu = (props: RightSideMenuProps) => {
           value={formValues?.dataType || dataTypeOptions[0].label}
         />
   
-        <InputBox
-          label="Column Length"
-          placeholder="Enter column length"
-          id="columnLength"
-          onChange={(value) => /^\d*$/g.test(value) && handleFromChange("length", value)}
-          value={formValues?.length || ""} />
+          {
+            formValues?.dataType !=="INTEGER" &&
+            <InputBox
+            label="Column Length"
+            placeholder="Enter column length"
+            id="columnLength"
+            onChange={(value) => /^\d*$/g.test(value) && handleFromChange("length", value)}
+            value={formValues?.length || ""} />
+          }
+       
   
         <DropdownMenu
           label="Constraints:"

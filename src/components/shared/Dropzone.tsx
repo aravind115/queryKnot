@@ -34,7 +34,7 @@ const Dropzone = (props: DropzoneProps) => {
             name: "id",
             dataType: "INTEGER",
             constraints: "PRIMARY KEY",
-            length:"30"
+            length:""
           }]
         }
 

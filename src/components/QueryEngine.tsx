@@ -1,12 +1,4 @@
 import { SchemaItemProps } from "./types";
-type DataTypeMapping = {
-    [key: string]: {
-        type: string;
-        format?: string;
-        minimum?: number;
-        maximum?: number;
-    };
-};
 interface MongoDBSchemaField {
     bsonType: string;
     maxLength?: number;
@@ -38,6 +30,109 @@ interface MongoDBSchemaField {
     additionalProperties: boolean;
   }
   
+
+  interface DataTypeMapping {
+    [key: string]: {
+      type: string;
+      format?: string;
+      maxLength?: number;
+      maximum?: number;
+      minimum?: number;
+    };
+  }
+  
+  interface Property {
+    type: string;
+    format?: string;
+    maxLength?: number;
+    maximum?: number;
+    required?: boolean;
+  }
+  
+  export function convertSQLToJSONSchema(sql: string): string[] | string {
+    if (!sql) {
+      return "";
+    }
+  
+    // Define the type mapping
+    const typeMapping: DataTypeMapping = {
+      INTEGER: { type: 'integer' },
+      VARCHAR: { type: 'string' },
+      CHAR: { type: 'string' },
+      TEXT: { type: 'string' },
+      DATE: { type: 'string', format: 'date' },
+      TIMESTAMP: { type: 'string', format: 'date-time' },
+      BOOLEAN: { type: 'boolean' },
+      FLOAT: { type: 'number' },
+      DOUBLE: { type: 'number' },
+      DECIMAL: { type: 'number' },
+      BINARY: { type: 'string', format: 'binary' },
+      BLOB: { type: 'string', format: 'binary' },
+      BIGINT: { type: 'integer' },
+      SMALLINT: { type: 'integer' },
+      TINYINT: { type: 'integer' },
+      BIT: { type: 'integer' },
+      ENUM: { type: 'string' },
+      SET: { type: 'array' },
+      DATETIME: { type: 'string', format: 'date-time' },
+      TIME: { type: 'string', format: 'time' },
+      YEAR: { type: 'integer', minimum: 1901, maximum: 2155 },
+      JSON: { type: 'object' },
+      UUID: { type: 'string', format: 'uuid' },
+      CLOB: { type: 'string' }
+    };
+  
+    // Function to process each CREATE TABLE statement
+    const processCreateTable = (statement: string): string => {
+      const lines = statement.split('\n').map(line => line.trim().replace(/,$/, ''));
+      const tableNameMatch = lines[0].match(/CREATE TABLE (\w+)/i);
+      if (!tableNameMatch) {
+        throw new Error('Table name not found in statement');
+      }
+      const tableName = tableNameMatch[1];
+      const properties: { [key: string]: Property } = {};
+  
+      lines.slice(1, -1).forEach(line => {
+        const match = line.match(/(\w+)\s+(\w+)(?:\((\d+)\))?.*/);
+        if (!match) return;
+  
+        const [, name, type, length] = match;
+        const property: Property = { ...typeMapping[type.toUpperCase()] };
+  
+        if (length) {
+          property.maxLength = parseInt(length, 10);
+        }
+  
+        // Set property required if NOT NULL exists in the line
+        property.required = line.includes("NOT NULL");
+  
+        properties[name] = property;
+      });
+  
+      return JSON.stringify({
+        tableName,
+        title: tableName.charAt(0).toUpperCase() + tableName.slice(1),
+        type: 'object',
+        properties,
+        additionalProperties: false
+      }, null, 4);
+    };
+  
+    // Remove transaction statements and split the input SQL into separate statements for each table
+    const cleanedSql = sql.replace(/BEGIN;|COMMIT;/gi, '');
+    const tableStatements = cleanedSql.match(/CREATE TABLE[\s\S]+?;\s*$/gm);
+  
+    if (!tableStatements) {
+      throw new Error('No CREATE TABLE statements found');
+    }
+  
+    // Process each CREATE TABLE statement and convert it to a JSON schema
+    const jsonSchemas = tableStatements.map(processCreateTable);
+  
+    // Combine all JSON schemas into a single JSON array
+    return jsonSchemas.length > 1 ? jsonSchemas : jsonSchemas[0];
+  }
+
   function getTypeMapping(bsonType: string): string {
     const typeMapping: { [key: string]: string } = {
       int: "integer",
@@ -47,6 +142,17 @@ interface MongoDBSchemaField {
   
     return typeMapping[bsonType] || bsonType;
   }
+
+
+
+
+
+
+
+
+
+
+
 export const createTableFromSchema = (schema: SchemaItemProps): string => {
     const { tableName, columns } = schema;
     const columnDefs = columns.map(({ name, dataType, length, constraints }) => {
@@ -112,74 +218,6 @@ db.createCollection("${tableName}", {
 export const createMongoDBCommandsFromData = (tableSchemas: SchemaItemProps[]): string => {
     return tableSchemas.map(schema => createMongoDBCollection(schema)).join('\n');
 };
-
-export function convertSQLToJSONSchema(sql: string): string {
-    if(!sql){
-      return ""
-    }
-      const lines = sql.split('\n').map(line => line.trim());
-      const tableName = lines[0].split(' ')[2];
-      const properties: { [key: string]: any } = {};
-      const typeMapping: DataTypeMapping = {
-          INTEGER: { type: 'integer' },
-          VARCHAR: { type: 'string' },
-          CHAR: { type: 'string' },
-          TEXT: { type: 'string' },
-          DATE: { type: 'string', format: 'date' },
-          TIMESTAMP: { type: 'string', format: 'date-time' },
-          BOOLEAN: { type: 'boolean' },
-          FLOAT: { type: 'number' },
-          DOUBLE: { type: 'number' },
-          DECIMAL: { type: 'number' },
-          BINARY: { type: 'string', format: 'binary' },
-          BLOB: { type: 'string', format: 'binary' },
-          BIGINT: { type: 'integer' },
-          SMALLINT: { type: 'integer' },
-          TINYINT: { type: 'integer' },
-          BIT: { type: 'integer' },
-          ENUM: { type: 'string' },
-          SET: { type: 'array' },
-          DATETIME: { type: 'string', format: 'date-time' },
-          TIME: { type: 'string', format: 'time' },
-          YEAR: { type: 'integer', minimum: 1901, maximum: 2155 },
-          JSON: { type: 'object' },
-          UUID: { type: 'string', format: 'uuid' },
-          CLOB: { type: 'string' }
-      };
-      
-      for (let i = 1; i < lines.length - 1; i++) {
-          const [field, typeLength] = lines[i].split(' ');
-          const [type, length] = typeLength ? typeLength.split('(') : [];
-          const name = field.replace(',', '');
-          const property: any = {
-            ...typeMapping[type],
-          };
-          if (length) {
-            property.maxLength = parseInt(length);
-          }
-          if (['BIGINT', 'SMALLINT', 'TINYINT', 'YEAR'].includes(type) && length) {
-            property.maximum = Math.pow(10, parseInt(length)) - 1;
-          }
-          properties[name] = {
-              ...typeMapping[type],
-              maxLength: length ? parseInt(length) : undefined,
-              maximum: ['BIGINT', 'SMALLINT', 'TINYINT', 'YEAR'].includes(type) && length ? Math.pow(10, parseInt(length)) - 1 : undefined
-            
-            };
-            console.log("lines[i]",lines[i],lines[i].includes("NOT NULL"))
-              property.required = lines[i].includes("NOT NULL");
-          properties[name] = property;
-      }
-  
-      return JSON.stringify({
-          tableName,
-          title: tableName.charAt(0).toUpperCase() + tableName.slice(1),
-          type: 'object',
-          properties,
-          additionalProperties: false
-      }, null, 4);
-  }
-
 
 export function convertMongoDBToJSONSchema(
     collectionName: string,

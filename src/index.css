@@ -29,7 +29,7 @@
    @apply w-8 h-8 my-5 cursor-pointer hover:text-ceruleanBlue
 }
 .leftNavContainer {
-    @apply flex flex-col h-full w-20 p-5 bg-deepSpace text-platinum text-center border border-gunmetal;
+    @apply flex flex-col h-full w-32 p-5 bg-deepSpace text-platinum text-center border border-gunmetal;
 }
 .rightNavContainer{
     @apply w-64 bg-deepSpace text-platinum p-3
