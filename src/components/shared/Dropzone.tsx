@@ -48,8 +48,7 @@ const Dropzone = (props: DropzoneProps) => {
     <div
       ref={ref}
       style={{
-        height:'50%',
-        border: '2px dashed gray',
+        height:'70%',
         position: 'relative',
       }}
     >

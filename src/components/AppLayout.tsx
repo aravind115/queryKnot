@@ -48,61 +48,63 @@ useEffect(() => {
           activeId={activeId}
           setActiveId={setActiveId}
         />
+        {
+                  <div className="clipboardArea" style={{ height: "30%" }}>
+                  <div className="flex h-full">
+                    <div className="w-1/2 bg-eclipse text-platinum p-2 border-r border-solid border-outerSpace">
+                    <label>Schema</label>
+                      <div className="flex content-center">
+                      <div className="w-1/2">
+                      <DropdownMenu
+                        options={DropdownOptions}
+                        onSelect={(selectedOption: any) => setSchemaData(selectedOption.id)}
+                        value={SchemaData} />
+                      </div>
+                      <div className="w-1/2 flex justify-end">
+                      <CopyToClipboard text={ SchemaData === "nosql" ? NoSQLcopyText ?? "" : copyText ?? ""} onCopy={handleCopy}>
+                      <div className="my-auto cursor-pointer">
+                          <ContentCopyIcon/>
+                        </div>
+                      </CopyToClipboard>
+                      </div>
+                      </div>
+                      <div className="relative w-full h-full">           
+                        <textarea
+                          className="textArea"
+                          value={SchemaData === "nosql"? NoSQLcopyText :copyText}
+                          readOnly
+                        >
+                        </textarea>
+                      </div>
+                      {/* No SQL */}
+                    </div>
+                    <div className="w-1/2 bg-eclipse text-platinum p-2">
+                    <div className="flex content-center">
+                      <div className="w-1/2 p-5">
+                      <label>JSON Schema</label>
+                      </div>
+                      <div className="w-1/2 flex justify-end pb-5">
+                      <CopyToClipboard text={jsonSchema ?jsonSchema :"" } onCopy={handleCopy}>
+                      <div className="my-auto cursor-pointer">
+                          <ContentCopyIcon/>
+                        </div>
+                      </CopyToClipboard>
+                      </div>
+                      </div>
+                      
+                      <div className="relative w-full h-full">
+                        <textarea
+                          className="textArea"
+                          value={jsonSchema}
+                          readOnly
+                        >
+                        </textarea>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+        }
 
-        <div className="clipboardArea" style={{ height: "50%" }}>
-          <div className="flex h-full">
-            <div className="w-1/2 bg-eclipse text-platinum p-2 border-r border-solid border-outerSpace">
-            <label>Schema</label>
-              <div className="flex content-center">
-              <div className="w-1/2">
-              <DropdownMenu
-                options={DropdownOptions}
-                onSelect={(selectedOption: any) => setSchemaData(selectedOption.id)}
-                value={SchemaData} />
-              </div>
-              <div className="w-1/2 flex justify-end">
-              <CopyToClipboard text={ SchemaData === "nosql" ? NoSQLcopyText ?? "" : copyText ?? ""} onCopy={handleCopy}>
-              <div className="my-auto cursor-pointer">
-                  <ContentCopyIcon/>
-                </div>
-              </CopyToClipboard>
-              </div>
-              </div>
-              <div className="relative w-full h-full">           
-                <textarea
-                  className="textArea"
-                  value={SchemaData === "nosql"? NoSQLcopyText :copyText}
-                  readOnly
-                >
-                </textarea>
-              </div>
-              {/* No SQL */}
-            </div>
-            <div className="w-1/2 bg-eclipse text-platinum p-2">
-            <div className="flex content-center">
-              <div className="w-1/2 p-5">
-              <label>JSON Schema</label>
-              </div>
-              <div className="w-1/2 flex justify-end pb-5">
-              <CopyToClipboard text={jsonSchema ?jsonSchema :"" } onCopy={handleCopy}>
-              <div className="my-auto cursor-pointer">
-                  <ContentCopyIcon/>
-                </div>
-              </CopyToClipboard>
-              </div>
-              </div>
-              
-              <div className="relative w-full h-full">
-                <textarea
-                  className="textArea"
-                  value={jsonSchema}
-                  readOnly
-                >
-                </textarea>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
 
       {/* Right navbar */}

@@ -107,7 +107,7 @@ const Canva: React.FC<CanvaProps> = (props) => {
                 <div
                     ref={dragRef}
                     style={{ cursor: 'grab' }}
-                    className={"cursor-grab box-border h-auto w-20 h-20 p-2 border m-1 hover:border-CodeBlue hover:text-ceruleanBlue"}
+                    className={"cursor-grab box-border h-auto w-16 h-20 p-2 border m-1 hover:border-CodeBlue hover:border-dotted hover:text-ceruleanBlue"}
                 >
                     <ViewColumnsIcon style={{width:'32px', margin:"auto"}}/>
                     <label>Table</label>
