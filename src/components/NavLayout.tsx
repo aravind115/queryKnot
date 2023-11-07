@@ -1,7 +1,4 @@
 import  { ReactNode } from 'react';
-import AppLogo from "../assets/image_2.png"
-import { InboxArrowDownIcon,ArrowUpTrayIcon,ArrowDownTrayIcon, PlayIcon } from '@heroicons/react/24/solid'
-
 interface NavLayoutProps{
     children:ReactNode;
 }

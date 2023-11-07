@@ -49,7 +49,7 @@ interface MongoDBSchemaField {
     required?: boolean;
   }
   
-  export function convertSQLToJSONSchema(sql: string): string[] | string {
+  export function convertSQLToJSONSchema(sql: string):string {
     if (!sql) {
       return "";
     }
@@ -130,7 +130,8 @@ interface MongoDBSchemaField {
     const jsonSchemas = tableStatements.map(processCreateTable);
   
     // Combine all JSON schemas into a single JSON array
-    return jsonSchemas.length > 1 ? jsonSchemas : jsonSchemas[0];
+    // return jsonSchemas.length > 1 ? jsonSchemas : jsonSchemas[0];
+    return `[${jsonSchemas.join(",\n")}]`;
   }
 
   function getTypeMapping(bsonType: string): string {
