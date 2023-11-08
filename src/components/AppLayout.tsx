@@ -48,10 +48,11 @@ useEffect(() => {
           activeId={activeId}
           setActiveId={setActiveId}
         />
+
         {
-                  <div className="clipboardArea" style={{ height: "30%" }}>
+                  <div className="clipboardArea bg-eclipse" style={{ height: "30%" }}>
                   <div className="flex h-full">
-                    <div className="w-1/2 bg-eclipse text-platinum p-2 border-r border-solid border-outerSpace">
+                    <div className="w-1/2 h-full bg-eclipse text-platinum p-2 border-r border-solid border-outerSpace">
                     <label>Schema</label>
                       <div className="flex content-center">
                       <div className="w-1/2">
@@ -78,7 +79,7 @@ useEffect(() => {
                       </div>
                       {/* No SQL */}
                     </div>
-                    <div className="w-1/2 bg-eclipse text-platinum p-2">
+                    <div className="w-1/2 h-full bg-eclipse text-platinum p-2">
                     <div className="flex content-center">
                       <div className="w-1/2 p-5">
                       <label>JSON Schema</label>

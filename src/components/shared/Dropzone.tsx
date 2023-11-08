@@ -50,6 +50,7 @@ const Dropzone = (props: DropzoneProps) => {
       style={{
         height:'70%',
         position: 'relative',
+        padding: 10
       }}
     >
       {

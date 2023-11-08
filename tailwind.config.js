@@ -7,7 +7,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        'mono': ['Roboto Mono', 'monospace']
+        'mono': ['Poppins', 'sans-serif']
       },
       width:{
         "40":"40%",
@@ -22,8 +22,8 @@ export default {
          'outline': '0 0 0 3px rgba(66, 153, 225, 0.5)'
       },
       backgroundColor: {
-        'deepSpace': '#1E1E1E',
-        'eclipse': '#3C3C3C',
+        'deepSpace': '#332e85',
+        'eclipse': '#8078ff',
         'ceruleanBlue': '#007ACC',
       },
       textColor: {
